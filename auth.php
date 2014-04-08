@@ -24,6 +24,16 @@ class auth_plugin_authgoogle extends auth_plugin_authplain  {
         $this->cando['external'] = true;
         $this->cando['logout'] = true; 
     }
+
+    public function getUserData($user) {
+        if($this->users === null) $this->_loadUserData();
+        foreach ($this->users as $key=>$val){
+            if (is_array($val) && $val['name'] === $user){
+                return $val;
+            }
+        }
+        return false;
+    }
     
     function trustExternal($user, $pass, $sticky = false) {
 	global $USERINFO, $ID;
