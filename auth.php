@@ -1,7 +1,8 @@
 <?php
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
-define('GOOGLE_API_DIR', dirname(__FILE__).'/google/');
+
+define('GOOGLE_API_DIR', dirname(__FILE__).'/Google/');
 
 global $conf;
 // define cookie and session id, append server port when securecookie is configured
@@ -68,8 +69,8 @@ class auth_plugin_authgoogle extends auth_plugin_authplain  {
         }
 
         //google auth
-        require_once GOOGLE_API_DIR.'/Google_Client.php';
-        require_once GOOGLE_API_DIR.'/contrib/Google_Oauth2Service.php';
+        require_once GOOGLE_API_DIR.'/autoload.php';
+        require_once GOOGLE_API_DIR.'/Service/Oauth2.php';
 
         $client = new Google_Client();
         $client->setApplicationName("Google Application");
@@ -78,8 +79,14 @@ class auth_plugin_authgoogle extends auth_plugin_authplain  {
         $client->setRedirectUri(wl('start',array('do'=>'login'),true, '&'));
         $client->setAccessType('online');
         $client->setApprovalPrompt('auto');
+        $client->setScopes(array(
+             'https://www.googleapis.com/auth/plus.login',
+             'profile',
+             'email',
+             'openid',
+        ));
 
-        $oauth2 = new Google_Oauth2Service($client);
+        $oauth2 = new Google_Service_Oauth2($client);
         //get code from google redirect link
         if (isset($_GET['code'])) {
             //get token

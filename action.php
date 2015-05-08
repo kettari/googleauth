@@ -2,7 +2,7 @@
 // must be run within Dokuwiki
 if (!defined('DOKU_INC')) die();
 
-define('GOOGLE_API_DIR', dirname(__FILE__).'/google/');
+define('GOOGLE_API_DIR', dirname(__FILE__).'/Google/');
 
 class action_plugin_authgoogle extends DokuWiki_Action_Plugin {    
     /**
