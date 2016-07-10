@@ -26,7 +26,7 @@ class auth_plugin_authgoogle extends auth_plugin_authplain  {
     }
 
     function trustExternal($user, $pass, $sticky = false) {
-	global $USERINFO, $ID;
+	global $USERINFO, $ID, $conf;
 
         //get user info in session
         if (!empty($_SESSION[DOKU_COOKIE]['authgoogle']['info'])) {
@@ -75,7 +75,7 @@ class auth_plugin_authgoogle extends auth_plugin_authplain  {
         $client->setApplicationName("Google Application");
         $client->setClientId($this->getConf('client_id'));
         $client->setClientSecret($this->getConf('client_secret'));
-        $client->setRedirectUri(wl('start',array('do'=>'login'),true, '&'));
+        $client->setRedirectUri(wl($conf['start'],array('do'=>'login'),true, '&'));
         $client->setAccessType('online');
         $client->setApprovalPrompt('auto');
 
@@ -90,7 +90,7 @@ class auth_plugin_authgoogle extends auth_plugin_authplain  {
                 //save token in cookies
                 $this->_updateCookie($_SESSION[DOKU_COOKIE]['authgoogle']['token'], time() + 60 * 60 * 24 * 365);
                 //redirect to login page
-                header("Location: ".wl('start', array('do'=>'login'), true, '&'));
+                header("Location: ".wl($conf['start'], array('do'=>'login'), true, '&'));
                 die();
             } catch (Exception $e) {
                 msg('Auth Google Error: '.$e->getMessage());
@@ -171,7 +171,7 @@ class auth_plugin_authgoogle extends auth_plugin_authplain  {
 
             //if login page - redirect to main page
             if (isset($_GET['do']) && $_GET['do']=='login')
-                header("Location: ".wl('start', '', true));
+                header("Location: ".wl($conf['start'], '', true));
 
             return true;
         } else {
